@@ -25,7 +25,7 @@ module Schema2type
     end
 
     def converted_type_lines
-      ["type #{table_name} = {", ID_PROPERTY_LINE_TEXT, property_lines, "}\n"].flatten
+      ["interface #{table_name}{", ID_PROPERTY_LINE_TEXT, property_lines, "}\n"].flatten
     end
 
     def method_missing(*)
@@ -38,7 +38,7 @@ module Schema2type
     def convert_property_line_and_push(name:, type:, options:)
       is_non_nullable = options[0] && options[0].key?(:null) && !options[0][:null]
       formatted_name = is_snake_case ? name.underscore : name.camelcase(:lower)
-      property_line = is_non_nullable ? "#{formatted_name}: #{type};" : "#{formatted_name}: #{type} | null;"
+      property_line = is_non_nullable ? "#{formatted_name}: #{type};" : "#{formatted_name}?: #{type};"
 
       property_lines << "  #{property_line}"
     end
